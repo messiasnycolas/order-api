@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { orderService } from '../services/order.service';
 
-async function getOrderSummary(req: Request, res: Response): Promise<void> {
+async function getOrderSummaries(req: Request, res: Response): Promise<void> {
     try {
         const pastDays = parseInt(req.params.pastDays) || 5;
 
@@ -9,9 +9,9 @@ async function getOrderSummary(req: Request, res: Response): Promise<void> {
             throw new Error('Invalid params!');
         }
 
-        const orderSummary = await orderService.getOrderSummary(pastDays);
+        const orderSummaries = await orderService.getOrderSummaries(pastDays);
 
-        res.status(200).send(orderSummary);
+        res.status(200).send(orderSummaries);
     } catch (error) {
         if (error instanceof Error) {
             error.message.includes('params') ? res.status(400) : res.status(500);
@@ -44,6 +44,6 @@ async function refreshOrderSummaries(req: Request, res: Response): Promise<void>
 }
 
 export const orderController = {
-    getOrderSummary,
+    getOrderSummaries,
     refreshOrderSummaries,
 }

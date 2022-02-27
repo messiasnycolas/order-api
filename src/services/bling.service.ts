@@ -1,7 +1,7 @@
 import axios from 'axios';
+import utf8 from 'utf8';
 import { formattedDeal } from '../interfaces/formattedDeal';
 import { order } from '../interfaces/order';
-import utf8 from 'utf8';
 
 function parseDealToOrder(deal: formattedDeal): order {
     return {
