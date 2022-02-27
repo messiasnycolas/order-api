@@ -4,18 +4,23 @@ import { pipedriveService } from './pipedrive.service';
 import { formattedDeal } from '../interfaces/formattedDeal';
 import { blingService } from './bling.service';
 import { buildXML } from '../helpers/buildXML';
+import { orderRepository } from '../repositories/order.repository';
 
 async function getOrderSummary(pastDays: number) {
-    return;
+    const pastDaysArray = getPastDaysArray(pastDays);
+
+    return orderRepository.getOrderSummaries(pastDaysArray);
 }
 
 async function refreshOrderSummaries(pastDays: number): Promise<void> {
     const wonDeals = await pipedriveService.getWonDeals();
-
     const pastDaysArray = getPastDaysArray(pastDays);
-    for (const day of pastDaysArray) {
+    
+    for (const date of pastDaysArray) {
+        let totalValue = 0;
+        
         const dailyWonDeals = wonDeals
-            .filter((deal: deal) => deal.won_time.split(' ')[0] === day)
+            .filter((deal: deal) => deal.won_time.split(' ')[0] === date)
             .map((deal: deal): formattedDeal => {
                 return {
                     id: deal.id,
@@ -30,8 +35,10 @@ async function refreshOrderSummaries(pastDays: number): Promise<void> {
             const orderXML = buildXML(order);
             await blingService.postOrder(orderXML);
 
-            // Save each deal using 'day'
+            totalValue += deal.value;
         }
+
+        await orderRepository.createOrUpdateOrderSummary({ totalValue, wonDate: date });
     }
 
 }
