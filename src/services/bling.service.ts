@@ -21,7 +21,7 @@ function parseDealToOrder(deal: formattedDeal): order {
     };
 }
 
-async function postOrder(orderXML: XMLDocument) {
+async function postOrder(orderXML: XMLDocument): Promise<void> {
     const baseUrl = process.env.BLING_URL;
     const token = process.env.BLING_TOKEN;
     const url = `${baseUrl}/pedido/json?apikey=${token}&xml=${orderXML}`;
