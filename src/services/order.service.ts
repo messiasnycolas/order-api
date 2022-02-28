@@ -1,3 +1,4 @@
+import { parseDateStringToUnix } from '../helpers/parseDateStringToUnix';
 import { getPastDaysArray } from '../helpers/getPastDaysArray';
 import { buildXML } from '../helpers/buildXML';
 import { deal } from '../interfaces/deal';
@@ -10,7 +11,9 @@ import { orderRepository } from '../repositories/order.repository';
 async function getOrderSummaries(pastDays: number): Promise<orderSummary[] | undefined> {
     const pastDaysArray = getPastDaysArray(pastDays);
 
-    return orderRepository.getOrderSummaries(pastDaysArray);
+    const orderSummaries = await orderRepository.getOrderSummaries(pastDaysArray);
+
+    return orderSummaries?.sort((a, b) => parseDateStringToUnix(b.wonDate) - parseDateStringToUnix(a.wonDate));
 }
 
 async function refreshOrderSummaries(pastDays: number): Promise<void> {
