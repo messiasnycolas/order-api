@@ -11,19 +11,23 @@ async function getOrderSummaries(pastDaysArray: string[]): Promise<orderSummary[
     return orderSummaryModel?.find({ wonDate: { $lte: pastDaysArray[0], $gte: pastDaysArray[lastIndex] } }, '-_id');
 }
 
-async function createOrUpdateOrderSummary(orderSummary: orderSummary) {
+async function upsertOrderSummaries(orderSummaries: orderSummary[]) {
     const mongoose = await connect();
 
     const orderSummaryModel = mongoose?.model('orderSummary', orderSummarySchema);
-
-    return orderSummaryModel?.findOneAndUpdate(
-        { wonDate: orderSummary.wonDate },
-        orderSummary,
-        { upsert: true }
+    
+    return orderSummaryModel?.bulkWrite(
+        orderSummaries.map(summary => ({
+            updateOne: {
+                filter: { wonDate: summary.wonDate },
+                update: summary,
+                upsert: true,
+            }
+        }))
     );
 }
 
 export const orderRepository = {
     getOrderSummaries,
-    createOrUpdateOrderSummary,
+    upsertOrderSummaries,
 };

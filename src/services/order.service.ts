@@ -14,6 +14,7 @@ async function getOrderSummaries(pastDays: number): Promise<orderSummary[] | und
 }
 
 async function refreshOrderSummaries(pastDays: number): Promise<void> {
+    const orderSummaries: orderSummary[] = [];
     const wonDeals = await pipedriveService.getWonDeals();
     const pastDaysArray = getPastDaysArray(pastDays);
 
@@ -37,11 +38,11 @@ async function refreshOrderSummaries(pastDays: number): Promise<void> {
             await blingService.postOrder(orderXML);
 
             totalValue += deal.value;
+            orderSummaries.push({ totalValue, wonDate: date });
         }
-
-        await orderRepository.createOrUpdateOrderSummary({ totalValue, wonDate: date });
     }
-
+    
+    await orderRepository.upsertOrderSummaries(orderSummaries);
 }
 
 export const orderService = {
