@@ -7,7 +7,7 @@ function parseDealToOrder(deal: formattedDeal): order {
     return {
         pedido: {
             cliente: {
-                nome: deal.clientName
+                nome: deal.clientName,
             },
             itens: {
                 item: {

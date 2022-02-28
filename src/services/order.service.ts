@@ -13,7 +13,9 @@ async function getOrderSummaries(pastDays: number): Promise<orderSummary[] | und
 
     const orderSummaries = await orderRepository.getOrderSummaries(pastDaysArray);
 
-    return orderSummaries?.sort((a, b) => parseDateStringToUnix(b.wonDate) - parseDateStringToUnix(a.wonDate));
+    return orderSummaries?.sort(
+        (a, b) => parseDateStringToUnix(b.wonDate) - parseDateStringToUnix(a.wonDate)
+    );
 }
 
 async function refreshOrderSummaries(pastDays: number): Promise<void> {
@@ -23,17 +25,7 @@ async function refreshOrderSummaries(pastDays: number): Promise<void> {
 
     for (const date of pastDaysArray) {
         let totalValue = 0;
-
-        const dailyWonDeals = wonDeals
-            .filter((deal: deal) => deal.won_time.split(' ')[0] === date)
-            .map((deal: deal): formattedDeal => {
-                return {
-                    id: deal.id,
-                    value: deal.value,
-                    clientName: deal.person_id.name,
-                    title: deal.title,
-                };
-            });
+        const dailyWonDeals: formattedDeal[] = getAndFormatDailyWonDeals(wonDeals, date);
 
         for (const deal of dailyWonDeals) {
             const order = blingService.parseDealToOrder(deal);
@@ -41,14 +33,28 @@ async function refreshOrderSummaries(pastDays: number): Promise<void> {
             await blingService.postOrder(orderXML);
 
             totalValue += deal.value;
-            orderSummaries.push({ totalValue, wonDate: date });
         }
+
+        orderSummaries.push({ totalValue, wonDate: date });
     }
-    
+
     await orderRepository.upsertOrderSummaries(orderSummaries);
 }
 
 export const orderService = {
     getOrderSummaries,
-    refreshOrderSummaries
+    refreshOrderSummaries,
+}
+
+function getAndFormatDailyWonDeals(wonDeals: [], date: string): formattedDeal[] {
+    return wonDeals.filter(
+        (deal: deal) => deal.won_time.split(' ')[0] === date
+    ).map(
+        (deal: deal): formattedDeal => ({
+            id: deal.id,
+            value: deal.value,
+            clientName: deal.person_id.name,
+            title: deal.title,
+        })
+    );
 }
