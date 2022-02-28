@@ -3,10 +3,10 @@ import { orderService } from '../services/order.service';
 
 async function getOrderSummaries(req: Request, res: Response): Promise<void> {
     try {
-        const pastDays = parseInt(req.params.pastDays) || 5;
+        const pastDays = parseInt(req.params.pastDays) || 0;
 
         if (pastDays < 0) {
-            throw new Error('Invalid params!');
+            throw new Error('Invalid params');
         }
 
         const orderSummaries = await orderService.getOrderSummaries(pastDays);
@@ -24,15 +24,15 @@ async function getOrderSummaries(req: Request, res: Response): Promise<void> {
 
 async function refreshOrderSummaries(req: Request, res: Response): Promise<void> {
     try {
-        const pastDays = parseInt(req.body.pastDays) || 1;
+        const pastDays = parseInt(req.body.pastDays) || 0;
 
         if (pastDays < 0) {
-            throw new Error('Invalid params!');
+            throw new Error('Invalid params');
         }
 
         orderService.refreshOrderSummaries(pastDays);
 
-        res.status(200).send(`Job successfully created. Refreshing order summaries for the past ${pastDays} days.`);
+        res.status(200).send(`Job successfully created. Refreshing order summaries for the past ${pastDays || ''} day(s).`);
     } catch (error) {
         if (error instanceof Error) {
             error.message.includes('params') ? res.status(400) : res.status(500);
