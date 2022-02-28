@@ -39,7 +39,7 @@ SERVER_TOKEN=BananaApplePineappleStrawberryGrape
 
 - ```headers: { authorization: your-.env-file-SERVER_TOKEN }```
 
-- *pastDays* is expected to be **0 or any natural number** and it represents which days will be searched for summaries.
+- *pastDays* is optional, expected to be **0 or any natural number** and it represents which days will be searched for summaries.
     
     - e.g. `0` brings today results, if they exist;
 
@@ -77,7 +77,7 @@ SERVER_TOKEN=BananaApplePineappleStrawberryGrape
 }
 ```
 
-- *pastDays* is expected to be **0 or any natural number** and it represents which days will be used for building summaries. 
+- *pastDays* is optional, expected to be **0 or any natural number** and it represents which days will be used for building summaries. 
     
     - e.g. `0` fetch today's current won deals from Pipedrive, add them as orders on Bling and finally store the daily summary, containing the total value; 
     
