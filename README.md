@@ -5,13 +5,17 @@
 ---    
 ## *Setup*
 ### In order to run the project, take the following steps:
+
 - clone or download code
 - create a `.env` file in project root, populate it following the `example.env` file and without quotes:
+    - Obs.: Log Service variables are optional.
+
 ```
 # Config
 SERVER_PORT=3000
 SERVER_TOKEN=BananaApplePineappleStrawberryGrape    
 ```
+
 - choose one of the following:
     
     - local environment

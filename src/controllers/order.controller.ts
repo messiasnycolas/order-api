@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { log } from '../logs/loggly';
 import { orderService } from '../services/order.service';
 
 async function getOrderSummaries(req: Request, res: Response): Promise<void> {
@@ -15,6 +16,7 @@ async function getOrderSummaries(req: Request, res: Response): Promise<void> {
     } catch (error) {
         if (error instanceof Error) {
             error.message.includes('params') ? res.status(400) : res.status(500);
+            log('error', error.message);
             res.send(error.message);
         } else {
             res.status(500).end();
@@ -36,6 +38,7 @@ async function refreshOrderSummaries(req: Request, res: Response): Promise<void>
     } catch (error) {
         if (error instanceof Error) {
             error.message.includes('params') ? res.status(400) : res.status(500);
+            log('error', error.message);
             res.send(error.message);
         } else {
             res.status(500).end();

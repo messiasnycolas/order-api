@@ -21,6 +21,9 @@ async function getOrderSummaries(pastDays: number): Promise<orderSummary[] | und
 async function refreshOrderSummaries(pastDays: number): Promise<void> {
     const orderSummaries: orderSummary[] = [];
     const wonDeals = await pipedriveService.getWonDeals();
+
+    if (wonDeals.length === 0) return;
+
     const pastDaysArray = getPastDaysArray(pastDays);
 
     for (const date of pastDaysArray) {
