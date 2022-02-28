@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "NodeJS TS Express RESTful API",
   "main": "dist/index.js",
+  "repository": "https://github.com/messiasnycolas/order-api",
   "scripts": {
     "dev": "ts-node-dev src/index.ts",
     "start": "node dist/index.js",
