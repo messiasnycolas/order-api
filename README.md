@@ -55,16 +55,28 @@ SERVER_TOKEN=BananaApplePineappleStrawberryGrape
 ```
 [
     {
+        "wonDate": "2022-02-28",
+        "opportunities": [
+            {
+                "id": 4,
+                "value": 1999.99,
+                "clientName": "Tiãozinho",
+                "title": "Negócio Spoletto"
+            }
+        ],
+        "totalValue": 1999.99
+    },
+    {
         "wonDate": "2022-02-27",
+        "opportunities": [
+            {
+                "id": 2,
+                "value": 899.25,
+                "clientName": "Toninho",
+                "title": "Negócio Giraffas"
+            }
+        ],
         "totalValue": 899.25
-    },
-    {
-        "wonDate": "2022-02-26",
-        "totalValue": 150
-    },
-    {
-        "wonDate": "2022-02-25",
-        "totalValue": 0
     }
 ]
 ```
@@ -83,7 +95,7 @@ SERVER_TOKEN=BananaApplePineappleStrawberryGrape
 
 - *pastDays* is optional, expected to be **0 or any natural number** and it represents which days will be used for building summaries. 
     
-    - e.g. `0` fetch today's current won deals from Pipedrive, add them as orders on Bling and finally store the daily summary, containing the total value; 
+    - e.g. `0` fetch today's current won deals from Pipedrive, add them as orders on Bling and finally store the daily summary, containing the total value and the oportunities; 
     
     - `1` do the same for today and yesterday won deals, and so on.
     

@@ -38,7 +38,7 @@ async function refreshOrderSummaries(pastDays: number): Promise<void> {
             totalValue += deal.value;
         }
 
-        orderSummaries.push({ totalValue, wonDate: date });
+        orderSummaries.push({ totalValue, wonDate: date, opportunities: dailyWonDeals });
     }
 
     await orderRepository.upsertOrderSummaries(orderSummaries);
